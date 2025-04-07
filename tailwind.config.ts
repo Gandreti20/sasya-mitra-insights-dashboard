@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,26 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom colors for Sasya Mitra
+				sasya: {
+					green: {
+						light: '#6DAE81',
+						DEFAULT: '#3E6553',
+						dark: '#2D4A3E'
+					},
+					brown: {
+						light: '#C8A27A',
+						DEFAULT: '#8B5A2B',
+						dark: '#634121'
+					},
+					blue: {
+						light: '#7FB3FF',
+						DEFAULT: '#4A90E2',
+						dark: '#3A73B5'
+					},
+					soil: '#8D6E63',
+					leaf: '#A5D6A7',
 				}
 			},
 			borderRadius: {
@@ -84,11 +105,16 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-slow': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.7' },
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-slow': 'pulse-slow 3s ease-in-out infinite',
 			}
 		}
 	},
