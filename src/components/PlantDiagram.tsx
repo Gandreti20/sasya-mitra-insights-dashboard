@@ -21,75 +21,40 @@ export const PlantDiagram = () => {
       <CardContent className="pt-4 h-[calc(100%-65px)]">
         <div className="flex h-full">
           <div className="w-1/2 relative">
-            {/* Plant diagram */}
+            {/* Realistic Plant Image */}
             <div className="plant-container h-full relative flex flex-col items-center justify-center">
-              {/* Tree trunk */}
-              <div className="w-6 h-40 bg-sasya-brown rounded-full mx-auto relative">
-                {/* Tree canopy */}
-                <div className="absolute -left-20 -top-28 w-48 h-32 bg-sasya-green-light rounded-full"></div>
-                <div className="absolute -left-16 -top-16 w-40 h-28 bg-sasya-green rounded-full"></div>
-                <div className="absolute -left-12 -top-20 w-32 h-24 bg-sasya-green-dark rounded-full"></div>
-                
-                {/* Fruits */}
-                <div className="absolute left-5 -top-20 w-5 h-7 bg-sasya-brown-light rounded-full transform rotate-12"></div>
-                <div className="absolute -left-2 -top-18 w-5 h-7 bg-sasya-brown-light rounded-full transform -rotate-12"></div>
-                <div className="absolute left-8 -top-12 w-5 h-7 bg-sasya-brown-light rounded-full transform rotate-45"></div>
-                
-                {/* Leaf Wetness Line */}
-                <div className="absolute left-16 top-0 w-24 border-t border-dashed border-gray-400"></div>
-                <div className="absolute left-[9.5rem] top-0 text-xs">
-                  <div className="flex items-center gap-1">
-                    <Leaf className="h-4 w-4 text-sasya-green" />
-                    <span>Leaf Wetness: {plantData.leafWetness}%</span>
+              <div className="relative w-full h-full flex items-center justify-center">
+                {/* Tree image with positioning and responsive sizing */}
+                <div className="relative w-4/5 h-4/5">
+                  <img 
+                    src="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80" 
+                    alt="Mango tree" 
+                    className="object-contain w-full h-full rounded-lg opacity-90"
+                  />
+                  
+                  {/* Measurement indicators */}
+                  <div className="absolute -right-16 top-1/4 w-16 border-t border-dashed border-gray-400"></div>
+                  <div className="absolute -right-[7.5rem] top-[20%] text-xs">
+                    <div className="flex items-center gap-1 bg-white/80 p-1 rounded shadow-sm">
+                      <Leaf className="h-4 w-4 text-sasya-green" />
+                      <span>Leaf Wetness: {plantData.leafWetness}%</span>
+                    </div>
                   </div>
-                </div>
-                
-                {/* Temperature Line */}
-                <div className="absolute right-12 top-4 w-16 border-t border-dashed border-gray-400"></div>
-                <div className="absolute right-[7.5rem] top-0 text-xs">
-                  <div className="flex items-center gap-1">
-                    <Thermometer className="h-4 w-4 text-red-500" />
-                    <span>Temperature: {plantData.temperature}°C</span>
+                  
+                  <div className="absolute -left-16 top-1/3 w-16 border-t border-dashed border-gray-400"></div>
+                  <div className="absolute -left-[7.5rem] top-[30%] text-xs">
+                    <div className="flex items-center gap-1 bg-white/80 p-1 rounded shadow-sm">
+                      <Thermometer className="h-4 w-4 text-red-500" />
+                      <span>Temperature: {plantData.temperature}°C</span>
+                    </div>
                   </div>
-                </div>
-                
-                {/* Light Intensity line */}
-                <div className="absolute -right-28 top-20 w-14 border-t border-dashed border-gray-400"></div>
-                <div className="absolute -right-[7.5rem] top-16 text-xs">
-                  <div className="flex items-center gap-1">
-                    <svg className="h-4 w-4 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="5" />
-                      <line x1="12" y1="1" x2="12" y2="3" />
-                      <line x1="12" y1="21" x2="12" y2="23" />
-                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                      <line x1="1" y1="12" x2="3" y2="12" />
-                      <line x1="21" y1="12" x2="23" y2="12" />
-                      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                    </svg>
-                    <span>Light: {plantData.lightIntensity}%</span>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Soil */}
-              <div className="w-full h-16 bg-sasya-soil/70 rounded-t-xl mt-2 relative">
-                {/* Soil Moisture Line */}
-                <div className="absolute left-6 top-6 w-16 border-t border-dashed border-gray-400"></div>
-                <div className="absolute left-[5.5rem] top-4 text-xs">
-                  <div className="flex items-center gap-1">
-                    <Droplet className="h-4 w-4 text-sasya-blue" />
-                    <span>Soil Moisture: {plantData.soilMoisture}%</span>
-                  </div>
-                </div>
-                
-                {/* Soil Temperature Line */}
-                <div className="absolute right-6 top-8 w-16 border-t border-dashed border-gray-400"></div>
-                <div className="absolute right-[5.5rem] top-6 text-xs">
-                  <div className="flex items-center gap-1">
-                    <Thermometer className="h-4 w-4 text-orange-500" />
-                    <span>Soil Temp: {plantData.soilTemperature}°C</span>
+                  
+                  <div className="absolute left-1/2 -bottom-12 border-l border-dashed border-gray-400 h-12"></div>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-[4rem] text-xs">
+                    <div className="flex items-center gap-1 bg-white/80 p-1 rounded shadow-sm">
+                      <Droplet className="h-4 w-4 text-sasya-blue" />
+                      <span>Soil Moisture: {plantData.soilMoisture}%</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -98,7 +63,7 @@ export const PlantDiagram = () => {
           
           <div className="w-1/2 flex flex-col justify-center gap-3 pl-6">
             <div className="grid grid-cols-1 gap-3">
-              <Card className="p-3">
+              <Card className="p-3 border-sasya-green/30 shadow-sm">
                 <div className="flex items-center gap-2">
                   <Thermometer className="h-5 w-5 text-red-500" />
                   <div>
@@ -108,7 +73,7 @@ export const PlantDiagram = () => {
                 </div>
               </Card>
               
-              <Card className="p-3">
+              <Card className="p-3 border-sasya-green/30 shadow-sm">
                 <div className="flex items-center gap-2">
                   <Leaf className="h-5 w-5 text-sasya-green" />
                   <div>
@@ -118,7 +83,7 @@ export const PlantDiagram = () => {
                 </div>
               </Card>
               
-              <Card className="p-3">
+              <Card className="p-3 border-sasya-green/30 shadow-sm">
                 <div className="flex items-center gap-2">
                   <Droplet className="h-5 w-5 text-sasya-blue" />
                   <div>
@@ -128,7 +93,7 @@ export const PlantDiagram = () => {
                 </div>
               </Card>
               
-              <Card className="p-3">
+              <Card className="p-3 border-sasya-green/30 shadow-sm">
                 <div className="flex items-center gap-2">
                   <Thermometer className="h-5 w-5 text-orange-500" />
                   <div>
@@ -138,7 +103,7 @@ export const PlantDiagram = () => {
                 </div>
               </Card>
               
-              <Card className="p-3">
+              <Card className="p-3 border-sasya-green/30 shadow-sm">
                 <div className="flex items-center gap-2">
                   <svg className="h-5 w-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <circle cx="12" cy="12" r="5" />
