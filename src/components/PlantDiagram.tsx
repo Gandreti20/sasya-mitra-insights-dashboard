@@ -9,31 +9,35 @@ export const PlantDiagram = () => {
     leafWetness: 65,
     soilMoisture: 72,
     soilTemperature: 24,
-    lightIntensity: 85
+    lightIntensity: 85,
+    crop: "Mango"
   };
 
   return (
     <Card className="h-full">
       <CardHeader className="bg-sasya-leaf/30 pb-2">
-        <CardTitle className="text-lg">Plant Conditions</CardTitle>
+        <CardTitle className="text-lg">Plant Conditions - {plantData.crop}</CardTitle>
       </CardHeader>
       <CardContent className="pt-4 h-[calc(100%-65px)]">
         <div className="flex h-full">
           <div className="w-1/2 relative">
             {/* Plant diagram */}
             <div className="plant-container h-full relative flex flex-col items-center justify-center">
-              {/* Stem */}
-              <div className="w-2 h-32 bg-sasya-green rounded-full mx-auto relative">
-                {/* Leaf 1 */}
-                <div className="absolute -left-8 top-4 w-10 h-6 bg-sasya-leaf rounded-full transform -rotate-12"></div>
-                {/* Leaf 2 */}
-                <div className="absolute -right-8 top-12 w-10 h-6 bg-sasya-leaf rounded-full transform rotate-12"></div>
-                {/* Leaf 3 */}
-                <div className="absolute -left-8 top-20 w-10 h-6 bg-sasya-leaf rounded-full transform -rotate-12"></div>
+              {/* Tree trunk */}
+              <div className="w-6 h-40 bg-sasya-brown rounded-full mx-auto relative">
+                {/* Tree canopy */}
+                <div className="absolute -left-20 -top-28 w-48 h-32 bg-sasya-green-light rounded-full"></div>
+                <div className="absolute -left-16 -top-16 w-40 h-28 bg-sasya-green rounded-full"></div>
+                <div className="absolute -left-12 -top-20 w-32 h-24 bg-sasya-green-dark rounded-full"></div>
+                
+                {/* Fruits */}
+                <div className="absolute left-5 -top-20 w-5 h-7 bg-sasya-brown-light rounded-full transform rotate-12"></div>
+                <div className="absolute -left-2 -top-18 w-5 h-7 bg-sasya-brown-light rounded-full transform -rotate-12"></div>
+                <div className="absolute left-8 -top-12 w-5 h-7 bg-sasya-brown-light rounded-full transform rotate-45"></div>
                 
                 {/* Leaf Wetness Line */}
-                <div className="absolute left-16 top-12 w-24 border-t border-dashed border-gray-400"></div>
-                <div className="absolute left-[9.5rem] top-6 text-xs">
+                <div className="absolute left-16 top-0 w-24 border-t border-dashed border-gray-400"></div>
+                <div className="absolute left-[9.5rem] top-0 text-xs">
                   <div className="flex items-center gap-1">
                     <Leaf className="h-4 w-4 text-sasya-green" />
                     <span>Leaf Wetness: {plantData.leafWetness}%</span>

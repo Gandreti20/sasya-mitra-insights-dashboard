@@ -4,6 +4,7 @@ import { MotorStatus } from "@/components/MotorStatus";
 import { GateValve } from "@/components/GateValve";
 import { PlantDiagram } from "@/components/PlantDiagram";
 import { PredictionTable } from "@/components/PredictionTable";
+import { AlertSection } from "@/components/AlertSection";
 
 const Index = () => {
   return (
@@ -17,6 +18,10 @@ const Index = () => {
           <div>
             <GateValve />
           </div>
+        </div>
+        
+        <div className="mb-6">
+          <AlertSection />
         </div>
         
         <div className="mb-6">
