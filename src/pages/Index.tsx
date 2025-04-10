@@ -1,36 +1,33 @@
 
+import { useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { MotorStatus } from "@/components/MotorStatus";
-import { GateValve } from "@/components/GateValve";
-import { PlantDiagram } from "@/components/PlantDiagram";
-import { PredictionTable } from "@/components/PredictionTable";
-import { AlertSection } from "@/components/AlertSection";
+import { PlotNavigation, Plot } from "@/components/PlotNavigation";
+import { PlotInterface } from "@/components/PlotInterface";
 
 const Index = () => {
+  const [plots, setPlots] = useState<Plot[]>([
+    { id: "plot1", name: "North Field", crop: "Mango", area: "2.5 acres" },
+    { id: "plot2", name: "South Field", crop: "Wheat", area: "3.2 acres" },
+  ]);
+
+  const [activePlot, setActivePlot] = useState<string>("plot1");
+
+  const currentPlot = plots.find(plot => plot.id === activePlot) || plots[0];
+
   return (
     <div className="min-h-screen bg-slate-50">
       <SiteHeader />
       <main className="container py-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div className="md:col-span-2">
-            <MotorStatus />
-          </div>
-          <div>
-            <GateValve />
-          </div>
-        </div>
-        
         <div className="mb-6">
-          <AlertSection />
+          <PlotNavigation 
+            plots={plots} 
+            activePlot={activePlot} 
+            setPlots={setPlots} 
+            setActivePlot={setActivePlot}
+          />
         </div>
         
-        <div className="mb-6">
-          <PlantDiagram />
-        </div>
-        
-        <div>
-          <PredictionTable />
-        </div>
+        <PlotInterface plot={currentPlot} />
       </main>
     </div>
   );
