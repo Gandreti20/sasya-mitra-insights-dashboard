@@ -25,6 +25,12 @@ import {
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Plot } from "./PlotNavigation";
 
+type ValveSection = {
+  id: string;
+  name: string;
+  isExpanded: boolean;
+};
+
 type PlotInterfaceProps = {
   plot: Plot;
 };
@@ -36,11 +42,9 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
   const [hasMotorSection, setHasMotorSection] = useState(false);
   
   const [isValveDialogOpen, setIsValveDialogOpen] = useState(false);
-  const [valveSectionName, setValveSectionName] = useState("");
-  const [hasValveSection, setHasValveSection] = useState(false);
+  const [valveSections, setValveSections] = useState<ValveSection[]>([]);
   
   const [isMotorExpanded, setIsMotorExpanded] = useState(true);
-  const [isValveExpanded, setIsValveExpanded] = useState(true);
 
   const handleCreateMotorSection = () => {
     if (customName.trim()) {
@@ -63,8 +67,15 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
     }
     
     if (customName.trim()) {
-      setValveSectionName(`Valve Control - ${customName}`);
-      setHasValveSection(true);
+      const newValveId = `valve-${Date.now()}`;
+      const newValveSection: ValveSection = {
+        id: newValveId,
+        name: `Valve Control - ${customName}`,
+        isExpanded: true
+      };
+      
+      setValveSections([...valveSections, newValveSection]);
+      
       toast.success("Valve section created", {
         description: `Valve control section has been created for ${plot.name}.`,
       });
@@ -73,6 +84,14 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
     } else {
       toast.error("Please enter a name");
     }
+  };
+
+  const toggleValveExpansion = (valveId: string) => {
+    setValveSections(valveSections.map(valve => 
+      valve.id === valveId 
+        ? { ...valve, isExpanded: !valve.isExpanded } 
+        : valve
+    ));
   };
 
   if (!plot) {
@@ -142,7 +161,7 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
           </Collapsible>
         )}
         
-        {hasMotorSection && !hasValveSection && (
+        {hasMotorSection && (
           <Card>
             <CardHeader className="bg-sasya-green/10 pb-2">
               <CardTitle className="text-lg">Create Valve Section</CardTitle>
@@ -161,22 +180,23 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
           </Card>
         )}
       
-        {hasValveSection && (
+        {valveSections.map((valve) => (
           <Collapsible 
-            open={isValveExpanded} 
-            onOpenChange={setIsValveExpanded}
+            key={valve.id}
+            open={valve.isExpanded} 
+            onOpenChange={() => toggleValveExpansion(valve.id)}
             className="w-full mb-6"
           >
             <Card>
               <CardHeader className="bg-sasya-green/10 pb-2 flex flex-row items-center justify-between">
-                <CardTitle className="text-lg">{valveSectionName}</CardTitle>
+                <CardTitle className="text-lg">{valve.name}</CardTitle>
                 <CollapsibleTrigger asChild>
                   <Button
                     variant="ghost"
                     size="sm"
                     className="w-9 p-0"
                   >
-                    {isValveExpanded ? (
+                    {valve.isExpanded ? (
                       <ChevronUp className="h-4 w-4 text-sasya-green" />
                     ) : (
                       <ChevronDown className="h-4 w-4 text-sasya-green" />
@@ -201,7 +221,7 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
               </CollapsibleContent>
             </Card>
           </Collapsible>
-        )}
+        ))}
       </div>
 
       {/* Motor Section Creation Dialog */}
