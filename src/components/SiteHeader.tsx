@@ -1,8 +1,11 @@
 
 import { TreePine, User, Bell, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PlotNavigation } from "./PlotNavigation";
+import { Plot } from "./PlotNavigation";
 import { Link } from "react-router-dom";
+
+// We're removing the direct import of PlotNavigation and not using it in this file
+// since it's now managed at the Index component level
 
 export const SiteHeader = () => {
   return (
@@ -28,8 +31,9 @@ export const SiteHeader = () => {
           </div>
         </div>
         
+        {/* Removing the PlotNavigation component from here since it's now managed at the Index level */}
         <div className="hidden md:flex items-center space-x-1">
-          <PlotNavigation />
+          {/* Navigation items can go here if needed */}
         </div>
         
         <nav className="flex items-center gap-4">
@@ -57,8 +61,9 @@ export const SiteHeader = () => {
         </nav>
       </div>
       
+      {/* Remove the mobile PlotNavigation as well */}
       <div className="md:hidden border-t bg-background px-4 py-2">
-        <PlotNavigation />
+        {/* Mobile navigation items can go here if needed */}
       </div>
     </header>
   );
