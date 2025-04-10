@@ -5,8 +5,19 @@ import { PlotNavigation, Plot } from "@/components/PlotNavigation";
 import { PlotInterface } from "@/components/PlotInterface";
 import { toast } from "sonner";
 
+// Extended Plot type to include motor and valve section data
+type ExtendedPlot = Plot & {
+  hasMotorSection?: boolean;
+  motorSectionName?: string;
+  valveSections?: {
+    id: string;
+    name: string;
+    isExpanded: boolean;
+  }[];
+};
+
 const Index = () => {
-  const [plots, setPlots] = useState<Plot[]>([]);
+  const [plots, setPlots] = useState<ExtendedPlot[]>([]);
   const [activePlot, setActivePlot] = useState<string>("");
   const currentPlot = plots.find(plot => plot.id === activePlot);
 
@@ -18,7 +29,14 @@ const Index = () => {
   }, [plots, activePlot]);
 
   const handleCreatePlot = (plot: Plot) => {
-    setPlots([...plots, plot]);
+    // Initialize the plot with empty motor and valve sections
+    const extendedPlot: ExtendedPlot = {
+      ...plot,
+      hasMotorSection: false,
+      valveSections: []
+    };
+    
+    setPlots([...plots, extendedPlot]);
     setActivePlot(plot.id);
     toast.success("New plot added", {
       description: `${plot.name} has been added to your dashboard.`,

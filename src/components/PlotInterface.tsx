@@ -22,7 +22,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus } from "lucide-react";
 import { Plot } from "./PlotNavigation";
 
 type ValveSection = {
@@ -162,20 +162,37 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
         )}
         
         {hasMotorSection && (
-          <Card>
-            <CardHeader className="bg-sasya-green/10 pb-2">
-              <CardTitle className="text-lg">Create Valve Section</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-4">
-              <p className="text-sm text-muted-foreground mb-4">
-                Create a valve control section to manage irrigation for this plot.
-              </p>
+          <Card className="mb-4">
+            <CardHeader className="bg-sasya-green/10 pb-2 flex flex-row items-center justify-between">
+              <CardTitle className="text-lg">Valve Sections</CardTitle>
               <Button
-                className="w-full bg-sasya-green hover:bg-sasya-green-dark"
+                variant="ghost"
+                size="sm"
+                className="flex items-center gap-1 text-sasya-green hover:text-sasya-green-dark"
                 onClick={() => setIsValveDialogOpen(true)}
               >
-                Create Valve Section
+                <Plus className="h-4 w-4" />
+                <span>Add Valve</span>
               </Button>
+            </CardHeader>
+            <CardContent className="pt-4">
+              {valveSections.length === 0 ? (
+                <div className="text-center py-6 border border-dashed border-gray-300 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    No valve sections yet. Create a valve control section to manage irrigation for this plot.
+                  </p>
+                  <Button
+                    className="bg-sasya-green hover:bg-sasya-green-dark"
+                    onClick={() => setIsValveDialogOpen(true)}
+                  >
+                    Create Valve Section
+                  </Button>
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  {valveSections.length} valve {valveSections.length === 1 ? 'section' : 'sections'} available. Each section can be expanded below.
+                </p>
+              )}
             </CardContent>
           </Card>
         )}
