@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Leaf, Thermometer, Droplet, Tree, TreePine, SunDim } from "lucide-react";
+import { Leaf, Thermometer, Droplet, TreePine, SunDim } from "lucide-react";
 
 export const PlantDiagram = () => {
   // Mock data for plant conditions
