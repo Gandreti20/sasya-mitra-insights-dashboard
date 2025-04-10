@@ -33,9 +33,10 @@ type PlotNavigationProps = {
   activePlot: string;
   setPlots: (plots: Plot[]) => void;
   setActivePlot: (id: string) => void;
+  onCreatePlot?: (plot: Plot) => void;
 };
 
-export const PlotNavigation = ({ plots, activePlot, setPlots, setActivePlot }: PlotNavigationProps) => {
+export const PlotNavigation = ({ plots, activePlot, setPlots, setActivePlot, onCreatePlot }: PlotNavigationProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newPlotName, setNewPlotName] = useState("");
   const [newPlotCrop, setNewPlotCrop] = useState("");
@@ -51,7 +52,7 @@ export const PlotNavigation = ({ plots, activePlot, setPlots, setActivePlot }: P
       return;
     }
 
-    const newPlotId = `plot${plots.length + 1}`;
+    const newPlotId = `plot${Date.now()}`;
     const newPlot = {
       id: newPlotId,
       name: newPlotName,
@@ -59,16 +60,17 @@ export const PlotNavigation = ({ plots, activePlot, setPlots, setActivePlot }: P
       area: newPlotArea || "1.0 acres",
     };
     
-    setPlots([...plots, newPlot]);
-    setActivePlot(newPlotId);
+    if (onCreatePlot) {
+      onCreatePlot(newPlot);
+    } else {
+      setPlots([...plots, newPlot]);
+      setActivePlot(newPlotId);
+    }
+
     setIsDialogOpen(false);
     setNewPlotName("");
     setNewPlotCrop("");
     setNewPlotArea("");
-    
-    toast.success("New plot added", {
-      description: `${newPlot.name} has been added to your dashboard.`,
-    });
   };
 
   return (
@@ -84,7 +86,7 @@ export const PlotNavigation = ({ plots, activePlot, setPlots, setActivePlot }: P
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[200px] gap-1 p-2">
-                  {plots.map((plot) => (
+                  {plots.length > 0 ? plots.map((plot) => (
                     <li key={plot.id}>
                       <NavigationMenuLink asChild>
                         <Button
@@ -99,7 +101,13 @@ export const PlotNavigation = ({ plots, activePlot, setPlots, setActivePlot }: P
                         </Button>
                       </NavigationMenuLink>
                     </li>
-                  ))}
+                  )) : (
+                    <li>
+                      <p className="px-2 py-1.5 text-sm text-muted-foreground">
+                        No plots added yet
+                      </p>
+                    </li>
+                  )}
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>

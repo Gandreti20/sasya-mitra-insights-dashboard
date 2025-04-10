@@ -17,6 +17,12 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { 
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { Plot } from "./PlotNavigation";
 
 type PlotInterfaceProps = {
@@ -25,18 +31,23 @@ type PlotInterfaceProps = {
 
 export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
   const [customName, setCustomName] = useState("");
-  const [motorSectionName, setMotorSectionName] = useState(`Motor Status - ${plot.name}`);
+  const [motorSectionName, setMotorSectionName] = useState("");
   const [isMotorDialogOpen, setIsMotorDialogOpen] = useState(false);
+  const [hasMotorSection, setHasMotorSection] = useState(false);
   
   const [isValveDialogOpen, setIsValveDialogOpen] = useState(false);
-  const [valveSectionName, setValveSectionName] = useState(`Valve Control - ${plot.name}`);
-  const [showValveSection, setShowValveSection] = useState(false);
+  const [valveSectionName, setValveSectionName] = useState("");
+  const [hasValveSection, setHasValveSection] = useState(false);
+  
+  const [isMotorExpanded, setIsMotorExpanded] = useState(true);
+  const [isValveExpanded, setIsValveExpanded] = useState(true);
 
-  const handleSetMotorName = () => {
+  const handleCreateMotorSection = () => {
     if (customName.trim()) {
       setMotorSectionName(`Motor Status - ${customName}`);
-      toast.success("Motor section renamed", {
-        description: `Motor section for ${plot.name} has been renamed.`,
+      setHasMotorSection(true);
+      toast.success("Motor section created", {
+        description: `Motor section for ${plot.name} has been created.`,
       });
       setCustomName("");
       setIsMotorDialogOpen(false);
@@ -46,9 +57,14 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
   };
 
   const handleCreateValveSection = () => {
+    if (!hasMotorSection) {
+      toast.error("Please create motor section first");
+      return;
+    }
+    
     if (customName.trim()) {
       setValveSectionName(`Valve Control - ${customName}`);
-      setShowValveSection(true);
+      setHasValveSection(true);
       toast.success("Valve section created", {
         description: `Valve control section has been created for ${plot.name}.`,
       });
@@ -59,82 +75,140 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
     }
   };
 
+  if (!plot) {
+    return (
+      <Card>
+        <CardContent className="pt-6 pb-6 text-center">
+          <p>Please select or create a plot to view details.</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div className="md:col-span-2">
-          <Card>
-            <CardHeader className="bg-sasya-green/10 pb-2 flex flex-row items-center justify-between">
-              <CardTitle className="text-lg">{motorSectionName}</CardTitle>
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="ml-2 bg-sasya-green/20 hover:bg-sasya-green/30 text-sasya-green"
-                onClick={() => setIsMotorDialogOpen(true)}
-              >
-                Rename
-              </Button>
-            </CardHeader>
-            <CardContent className="pt-4">
-              <MotorStatus />
-            </CardContent>
-          </Card>
-        </div>
-        <div>
-          {showValveSection ? (
-            <GateValve />
-          ) : (
-            <Card>
-              <CardHeader className="bg-sasya-green/10 pb-2">
-                <CardTitle className="text-lg">Create Valve Section</CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Create a valve control section to manage irrigation for this plot.
-                </p>
-                <Button
-                  className="w-full bg-sasya-green hover:bg-sasya-green-dark"
-                  onClick={() => setIsValveDialogOpen(true)}
-                >
-                  Create Valve Section
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      </div>
-      
-      <div className="mb-6">
-        <AlertSection />
-      </div>
-      
-      {showValveSection && (
-        <div className="mb-6">
+      <div className="grid grid-cols-1 gap-6 mb-6">
+        {!hasMotorSection && (
           <Card>
             <CardHeader className="bg-sasya-green/10 pb-2">
-              <CardTitle className="text-lg">{valveSectionName}</CardTitle>
+              <CardTitle className="text-lg">Create Motor Section</CardTitle>
             </CardHeader>
-            <CardContent className="pt-4 grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div>
-                <GateValve />
-              </div>
-              <div className="lg:col-span-2">
-                <PlantDiagram />
-              </div>
+            <CardContent className="pt-4">
+              <p className="text-sm text-muted-foreground mb-4">
+                Create a motor status section to monitor your equipment for this plot.
+              </p>
+              <Button
+                className="w-full bg-sasya-green hover:bg-sasya-green-dark"
+                onClick={() => setIsMotorDialogOpen(true)}
+              >
+                Create Motor Section
+              </Button>
             </CardContent>
           </Card>
-        </div>
-      )}
+        )}
+
+        {hasMotorSection && (
+          <Collapsible 
+            open={isMotorExpanded} 
+            onOpenChange={setIsMotorExpanded}
+            className="w-full"
+          >
+            <Card>
+              <CardHeader className="bg-sasya-green/10 pb-2 flex flex-row items-center justify-between">
+                <CardTitle className="text-lg">{motorSectionName}</CardTitle>
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-9 p-0"
+                  >
+                    {isMotorExpanded ? (
+                      <ChevronUp className="h-4 w-4 text-sasya-green" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4 text-sasya-green" />
+                    )}
+                  </Button>
+                </CollapsibleTrigger>
+              </CardHeader>
+              <CollapsibleContent>
+                <CardContent className="pt-4">
+                  <MotorStatus />
+                  <div className="mt-4">
+                    <AlertSection />
+                  </div>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
+        )}
+        
+        {hasMotorSection && !hasValveSection && (
+          <Card>
+            <CardHeader className="bg-sasya-green/10 pb-2">
+              <CardTitle className="text-lg">Create Valve Section</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-4">
+              <p className="text-sm text-muted-foreground mb-4">
+                Create a valve control section to manage irrigation for this plot.
+              </p>
+              <Button
+                className="w-full bg-sasya-green hover:bg-sasya-green-dark"
+                onClick={() => setIsValveDialogOpen(true)}
+              >
+                Create Valve Section
+              </Button>
+            </CardContent>
+          </Card>
+        )}
       
-      <div>
-        <PredictionTable />
+        {hasValveSection && (
+          <Collapsible 
+            open={isValveExpanded} 
+            onOpenChange={setIsValveExpanded}
+            className="w-full mb-6"
+          >
+            <Card>
+              <CardHeader className="bg-sasya-green/10 pb-2 flex flex-row items-center justify-between">
+                <CardTitle className="text-lg">{valveSectionName}</CardTitle>
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-9 p-0"
+                  >
+                    {isValveExpanded ? (
+                      <ChevronUp className="h-4 w-4 text-sasya-green" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4 text-sasya-green" />
+                    )}
+                  </Button>
+                </CollapsibleTrigger>
+              </CardHeader>
+              <CollapsibleContent>
+                <CardContent className="pt-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div>
+                      <GateValve />
+                    </div>
+                    <div className="lg:col-span-2">
+                      <PlantDiagram />
+                    </div>
+                  </div>
+                  <div className="mt-6">
+                    <PredictionTable />
+                  </div>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
+        )}
       </div>
 
-      {/* Motor Section Rename Dialog */}
+      {/* Motor Section Creation Dialog */}
       <Dialog open={isMotorDialogOpen} onOpenChange={setIsMotorDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Rename Motor Section</DialogTitle>
+            <DialogTitle>Create Motor Status Section</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -154,8 +228,8 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
             <Button variant="outline" onClick={() => setIsMotorDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleSetMotorName} className="bg-sasya-green hover:bg-sasya-green-dark">
-              Save
+            <Button onClick={handleCreateMotorSection} className="bg-sasya-green hover:bg-sasya-green-dark">
+              Create
             </Button>
           </DialogFooter>
         </DialogContent>
