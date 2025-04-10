@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Plus, Tractor, ChevronDown } from "lucide-react";
+import { Plus, Sprout, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -48,7 +48,7 @@ export const PlotNavigation = () => {
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuTrigger className="bg-sasya-green/10 text-sasya-green">
-              <Tractor className="mr-2 h-4 w-4" />
+              <Sprout className="mr-2 h-4 w-4" />
               <span>Plots</span>
               <ChevronDown className="h-4 w-4 ml-1" />
             </NavigationMenuTrigger>

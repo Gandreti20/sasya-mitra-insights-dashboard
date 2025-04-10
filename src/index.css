@@ -119,3 +119,33 @@
 .bg-green-gradient-dark {
   background: linear-gradient(135deg, rgba(58, 155, 83, 0.5) 0%, rgba(37, 99, 53, 0.4) 100%);
 }
+
+/* SVG Tree Animation */
+@keyframes leaf-sway {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+}
+
+.svg-tree-foliage {
+  transform-origin: bottom center;
+  animation: leaf-sway 8s ease-in-out infinite;
+}
+
+/* Button hover effects */
+.btn-action {
+  transition: all 0.2s ease;
+}
+
+.btn-action:hover {
+  box-shadow: 0 4px 12px rgba(62, 101, 83, 0.3);
+}
+
+/* Improved card styling */
+.metric-card {
+  border-left: 3px solid var(--primary);
+  transition: all 0.2s ease;
+}
+
+.metric-card:hover {
+  background-color: rgba(104, 211, 145, 0.05);
+}

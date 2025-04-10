@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Leaf, Thermometer, Droplet } from "lucide-react";
+import { Leaf, Thermometer, Droplet, Tree, TreePine, SunDim } from "lucide-react";
 
 export const PlantDiagram = () => {
   // Mock data for plant conditions
@@ -21,16 +21,29 @@ export const PlantDiagram = () => {
       <CardContent className="pt-4 h-[calc(100%-65px)]">
         <div className="flex h-full">
           <div className="w-1/2 relative">
-            {/* Realistic Plant Image */}
+            {/* SVG Tree Representation */}
             <div className="plant-container h-full relative flex flex-col items-center justify-center">
               <div className="relative w-full h-full flex items-center justify-center">
-                {/* Tree image with positioning and responsive sizing */}
-                <div className="relative w-4/5 h-4/5">
-                  <img 
-                    src="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80" 
-                    alt="Mango tree" 
-                    className="object-contain w-full h-full rounded-lg opacity-90"
-                  />
+                {/* SVG Tree with positioning and responsive sizing */}
+                <div className="relative w-4/5 h-4/5 flex items-center justify-center">
+                  <div className="relative">
+                    {/* Stylized tree representation using SVG */}
+                    <svg width="200" height="280" viewBox="0 0 200 280" className="drop-shadow-md">
+                      {/* Tree trunk */}
+                      <path d="M90 280 L90 180 Q95 160 100 150 Q105 160 110 180 L110 280 Z" fill="#8B5A2B" />
+                      
+                      {/* Tree foliage - mango tree styled */}
+                      <ellipse cx="100" cy="110" rx="80" ry="90" fill="#6DAE81" />
+                      <ellipse cx="65" cy="140" rx="40" ry="50" fill="#6DAE81" />
+                      <ellipse cx="135" cy="140" rx="40" ry="50" fill="#6DAE81" />
+                      <ellipse cx="100" cy="80" rx="60" ry="60" fill="#6DAE81" />
+                      
+                      {/* Mangoes */}
+                      <ellipse cx="70" cy="100" rx="12" ry="15" fill="#FEC6A1" />
+                      <ellipse cx="130" cy="130" rx="12" ry="15" fill="#FEC6A1" />
+                      <ellipse cx="90" cy="140" rx="12" ry="15" fill="#FEC6A1" />
+                    </svg>
+                  </div>
                   
                   {/* Measurement indicators */}
                   <div className="absolute -right-16 top-1/4 w-16 border-t border-dashed border-gray-400"></div>
@@ -105,17 +118,7 @@ export const PlantDiagram = () => {
               
               <Card className="p-3 border-sasya-green/30 shadow-sm">
                 <div className="flex items-center gap-2">
-                  <svg className="h-5 w-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="5" />
-                    <line x1="12" y1="1" x2="12" y2="3" />
-                    <line x1="12" y1="21" x2="12" y2="23" />
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                    <line x1="1" y1="12" x2="3" y2="12" />
-                    <line x1="21" y1="12" x2="23" y2="12" />
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                  </svg>
+                  <SunDim className="h-5 w-5 text-yellow-500" />
                   <div>
                     <p className="text-xs text-muted-foreground">Light Intensity</p>
                     <p className="text-base font-semibold">{plantData.lightIntensity}%</p>

@@ -1,5 +1,5 @@
 
-import { Leaf, User, Bell, LogOut } from "lucide-react";
+import { TreePine, User, Bell, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PlotNavigation } from "./PlotNavigation";
 import { Link } from "react-router-dom";
@@ -11,7 +11,11 @@ export const SiteHeader = () => {
         <div className="flex items-center gap-3">
           <Link to="/" className="flex items-center gap-2">
             <div className="flex items-center justify-center h-8 w-8 rounded-full bg-sasya-green/90">
-              <Leaf className="h-5 w-5 text-white" />
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+                <path d="M12 2L4 7V17L12 22L20 17V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="rgba(255,255,255,0.2)" />
+                <path d="M15 8.5C15 10.433 13.433 12 11.5 12C9.567 12 8 10.433 8 8.5C8 6.567 9.567 5 11.5 5C13.433 5 15 6.567 15 8.5Z" stroke="currentColor" fill="rgba(255,255,255,0.2)" strokeWidth="2" />
+                <path d="M12 12V19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
             </div>
             <h1 className="text-xl font-bold text-sasya-green">
               Aedaa
