@@ -4,6 +4,18 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { PlotNavigation, Plot } from "@/components/PlotNavigation";
 import { PlotInterface } from "@/components/PlotInterface";
 import { toast } from "sonner";
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 
 // Extended Plot type to include motor and valve section data
 type ExtendedPlot = Plot & {
@@ -19,12 +31,23 @@ type ExtendedPlot = Plot & {
 const Index = () => {
   const [plots, setPlots] = useState<ExtendedPlot[]>([]);
   const [activePlot, setActivePlot] = useState<string>("");
+  const [plotToDelete, setPlotToDelete] = useState<string | null>(null);
   const currentPlot = plots.find(plot => plot.id === activePlot);
 
   // Add some initial state management
   useEffect(() => {
     if (plots.length > 0 && !activePlot) {
       setActivePlot(plots[0].id);
+    }
+    
+    // If active plot was deleted, select the first plot
+    if (plots.length > 0 && activePlot && !plots.find(p => p.id === activePlot)) {
+      setActivePlot(plots[0].id);
+    }
+    
+    // If all plots were deleted, clear active plot
+    if (plots.length === 0) {
+      setActivePlot("");
     }
   }, [plots, activePlot]);
 
@@ -42,12 +65,32 @@ const Index = () => {
       description: `${plot.name} has been added to your dashboard.`,
     });
   };
+  
+  const handleDeletePlot = (plotId: string) => {
+    const plotToDelete = plots.find(p => p.id === plotId);
+    if (!plotToDelete) return;
+    
+    const updatedPlots = plots.filter(p => p.id !== plotId);
+    setPlots(updatedPlots);
+    
+    toast.success("Plot deleted", {
+      description: `${plotToDelete.name} has been deleted from your dashboard.`,
+    });
+    setPlotToDelete(null);
+  };
+  
+  const handleUpdatePlot = (updatedPlot: ExtendedPlot) => {
+    const updatedPlots = plots.map(plot => 
+      plot.id === updatedPlot.id ? updatedPlot : plot
+    );
+    setPlots(updatedPlots);
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
       <SiteHeader />
       <main className="container py-6">
-        <div className="mb-6">
+        <div className="mb-6 flex justify-between items-center">
           <PlotNavigation 
             plots={plots} 
             activePlot={activePlot} 
@@ -55,6 +98,18 @@ const Index = () => {
             setActivePlot={setActivePlot}
             onCreatePlot={handleCreatePlot}
           />
+          
+          {activePlot && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-red-500 hover:text-red-700 hover:bg-red-100 border-red-200"
+              onClick={() => setPlotToDelete(activePlot)}
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete Plot
+            </Button>
+          )}
         </div>
         
         {plots.length === 0 ? (
@@ -65,9 +120,34 @@ const Index = () => {
             </p>
           </div>
         ) : (
-          <PlotInterface plot={currentPlot as Plot} />
+          <PlotInterface 
+            plot={currentPlot as ExtendedPlot} 
+            onUpdatePlot={handleUpdatePlot}
+          />
         )}
       </main>
+      
+      {/* Delete Plot Confirmation Dialog */}
+      <AlertDialog open={!!plotToDelete} onOpenChange={(open) => !open && setPlotToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Plot</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will delete the plot and all its sections permanently.
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-500 hover:bg-red-600 text-white"
+              onClick={() => plotToDelete && handleDeletePlot(plotToDelete)}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

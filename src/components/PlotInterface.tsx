@@ -12,6 +12,16 @@ import {
   DialogTitle, 
   DialogFooter 
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -22,7 +32,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronUp, Plus } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
 import { Plot } from "./PlotNavigation";
 
 type ValveSection = {
@@ -33,23 +43,38 @@ type ValveSection = {
 
 type PlotInterfaceProps = {
   plot: Plot;
+  onUpdatePlot?: (updatedPlot: any) => void;
 };
 
-export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
+export const PlotInterface = ({ plot, onUpdatePlot }: PlotInterfaceProps) => {
   const [customName, setCustomName] = useState("");
-  const [motorSectionName, setMotorSectionName] = useState("");
+  const [motorSectionName, setMotorSectionName] = useState(plot.motorSectionName || "");
   const [isMotorDialogOpen, setIsMotorDialogOpen] = useState(false);
-  const [hasMotorSection, setHasMotorSection] = useState(false);
+  const [hasMotorSection, setHasMotorSection] = useState(plot.hasMotorSection || false);
   
   const [isValveDialogOpen, setIsValveDialogOpen] = useState(false);
-  const [valveSections, setValveSections] = useState<ValveSection[]>([]);
+  const [valveSections, setValveSections] = useState<ValveSection[]>(plot.valveSections || []);
   
   const [isMotorExpanded, setIsMotorExpanded] = useState(true);
+  
+  // Delete confirmation dialogs
+  const [isDeleteMotorDialogOpen, setIsDeleteMotorDialogOpen] = useState(false);
+  const [deleteValveId, setDeleteValveId] = useState<string | null>(null);
 
   const handleCreateMotorSection = () => {
     if (customName.trim()) {
-      setMotorSectionName(`Motor Status - ${customName}`);
+      const newMotorName = `Motor Status - ${customName}`;
+      setMotorSectionName(newMotorName);
       setHasMotorSection(true);
+      
+      if (onUpdatePlot) {
+        onUpdatePlot({
+          ...plot,
+          hasMotorSection: true,
+          motorSectionName: newMotorName
+        });
+      }
+      
       toast.success("Motor section created", {
         description: `Motor section for ${plot.name} has been created.`,
       });
@@ -74,7 +99,15 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
         isExpanded: true
       };
       
-      setValveSections([...valveSections, newValveSection]);
+      const updatedValveSections = [...valveSections, newValveSection];
+      setValveSections(updatedValveSections);
+      
+      if (onUpdatePlot) {
+        onUpdatePlot({
+          ...plot,
+          valveSections: updatedValveSections
+        });
+      }
       
       toast.success("Valve section created", {
         description: `Valve control section has been created for ${plot.name}.`,
@@ -87,11 +120,58 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
   };
 
   const toggleValveExpansion = (valveId: string) => {
-    setValveSections(valveSections.map(valve => 
+    const updatedValveSections = valveSections.map(valve => 
       valve.id === valveId 
         ? { ...valve, isExpanded: !valve.isExpanded } 
         : valve
-    ));
+    );
+    
+    setValveSections(updatedValveSections);
+    
+    if (onUpdatePlot) {
+      onUpdatePlot({
+        ...plot,
+        valveSections: updatedValveSections
+      });
+    }
+  };
+  
+  const handleDeleteMotorSection = () => {
+    setHasMotorSection(false);
+    setMotorSectionName("");
+    // When deleting motor section, also delete all valve sections
+    setValveSections([]);
+    
+    if (onUpdatePlot) {
+      onUpdatePlot({
+        ...plot,
+        hasMotorSection: false,
+        motorSectionName: "",
+        valveSections: []
+      });
+    }
+    
+    toast.success("Motor section deleted", {
+      description: `Motor section and all valve sections for ${plot.name} have been deleted.`,
+    });
+    setIsDeleteMotorDialogOpen(false);
+  };
+  
+  const handleDeleteValveSection = (valveId: string) => {
+    const updatedValveSections = valveSections.filter(valve => valve.id !== valveId);
+    setValveSections(updatedValveSections);
+    
+    if (onUpdatePlot) {
+      onUpdatePlot({
+        ...plot,
+        valveSections: updatedValveSections
+      });
+    }
+    
+    toast.success("Valve section deleted", {
+      description: `Valve section has been deleted from ${plot.name}.`,
+    });
+    setDeleteValveId(null);
   };
 
   if (!plot) {
@@ -135,19 +215,29 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
             <Card>
               <CardHeader className="bg-sasya-green/10 pb-2 flex flex-row items-center justify-between">
                 <CardTitle className="text-lg">{motorSectionName}</CardTitle>
-                <CollapsibleTrigger asChild>
+                <div className="flex items-center space-x-2">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="w-9 p-0"
+                    className="text-red-500 hover:text-red-700 hover:bg-red-100"
+                    onClick={() => setIsDeleteMotorDialogOpen(true)}
                   >
-                    {isMotorExpanded ? (
-                      <ChevronUp className="h-4 w-4 text-sasya-green" />
-                    ) : (
-                      <ChevronDown className="h-4 w-4 text-sasya-green" />
-                    )}
+                    <Trash2 className="h-4 w-4" />
                   </Button>
-                </CollapsibleTrigger>
+                  <CollapsibleTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-9 p-0"
+                    >
+                      {isMotorExpanded ? (
+                        <ChevronUp className="h-4 w-4 text-sasya-green" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 text-sasya-green" />
+                      )}
+                    </Button>
+                  </CollapsibleTrigger>
+                </div>
               </CardHeader>
               <CollapsibleContent>
                 <CardContent className="pt-4">
@@ -207,19 +297,29 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
             <Card>
               <CardHeader className="bg-sasya-green/10 pb-2 flex flex-row items-center justify-between">
                 <CardTitle className="text-lg">{valve.name}</CardTitle>
-                <CollapsibleTrigger asChild>
+                <div className="flex items-center space-x-2">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="w-9 p-0"
+                    className="text-red-500 hover:text-red-700 hover:bg-red-100"
+                    onClick={() => setDeleteValveId(valve.id)}
                   >
-                    {valve.isExpanded ? (
-                      <ChevronUp className="h-4 w-4 text-sasya-green" />
-                    ) : (
-                      <ChevronDown className="h-4 w-4 text-sasya-green" />
-                    )}
+                    <Trash2 className="h-4 w-4" />
                   </Button>
-                </CollapsibleTrigger>
+                  <CollapsibleTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-9 p-0"
+                    >
+                      {valve.isExpanded ? (
+                        <ChevronUp className="h-4 w-4 text-sasya-green" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 text-sasya-green" />
+                      )}
+                    </Button>
+                  </CollapsibleTrigger>
+                </div>
               </CardHeader>
               <CollapsibleContent>
                 <CardContent className="pt-4">
@@ -302,6 +402,50 @@ export const PlotInterface = ({ plot }: PlotInterfaceProps) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
+      {/* Delete Motor Confirmation Dialog */}
+      <AlertDialog open={isDeleteMotorDialogOpen} onOpenChange={setIsDeleteMotorDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Motor Section</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will delete the motor section and all valve sections for this plot. 
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-500 hover:bg-red-600 text-white"
+              onClick={handleDeleteMotorSection}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      
+      {/* Delete Valve Confirmation Dialog */}
+      <AlertDialog open={!!deleteValveId} onOpenChange={(open) => !open && setDeleteValveId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Valve Section</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will delete the valve section from this plot. 
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-500 hover:bg-red-600 text-white"
+              onClick={() => deleteValveId && handleDeleteValveSection(deleteValveId)}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };
