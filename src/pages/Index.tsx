@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { PlotNavigation, Plot } from "@/components/PlotNavigation";
 import { PlotInterface } from "@/components/PlotInterface";
+import { LandingPage } from "@/components/LandingPage";
 import { toast } from "sonner";
 import { 
   AlertDialog,
@@ -18,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 
 const Index = () => {
+  const [showDashboard, setShowDashboard] = useState(false);
   const [plots, setPlots] = useState<Plot[]>([]);
   const [activePlot, setActivePlot] = useState<string>("");
   const [plotToDelete, setPlotToDelete] = useState<string | null>(null);
@@ -49,6 +51,7 @@ const Index = () => {
     
     setPlots([...plots, newPlot]);
     setActivePlot(newPlot.id);
+    setShowDashboard(true);
     toast.success("New plot added", {
       description: `${plot.name} has been added to your dashboard.`,
     });
@@ -74,6 +77,21 @@ const Index = () => {
     setPlots(updatedPlots);
   };
 
+  if (!showDashboard) {
+    return (
+      <>
+        <SiteHeader />
+        <LandingPage />
+        <Button 
+          className="fixed bottom-6 right-6 shadow-lg"
+          onClick={() => setShowDashboard(true)}
+        >
+          Go to Dashboard
+        </Button>
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-50">
       <SiteHeader />
@@ -87,17 +105,27 @@ const Index = () => {
             onCreatePlot={handleCreatePlot}
           />
           
-          {activePlot && (
-            <Button
-              variant="outline"
+          <div className="flex items-center gap-3">
+            <Button 
+              variant="outline" 
               size="sm"
-              className="text-red-500 hover:text-red-700 hover:bg-red-100 border-red-200"
-              onClick={() => setPlotToDelete(activePlot)}
+              onClick={() => setShowDashboard(false)}
             >
-              <Trash2 className="h-4 w-4 mr-2" />
-              Delete Plot
+              Back to Home
             </Button>
-          )}
+            
+            {activePlot && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-red-500 hover:text-red-700 hover:bg-red-100 border-red-200"
+                onClick={() => setPlotToDelete(activePlot)}
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete Plot
+              </Button>
+            )}
+          </div>
         </div>
         
         {plots.length === 0 ? (
