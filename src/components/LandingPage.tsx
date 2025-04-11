@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,15 +9,54 @@ import { ArrowRight, Clock, Droplet, Leaf, Sun, Thermometer, Tractor, Zap } from
 
 export const LandingPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const navigate = useNavigate();
+  
+  // Add floating animation effect for background elements
+  const [animationOffset, setAnimationOffset] = useState(0);
+  
+  useEffect(() => {
+    const animationInterval = setInterval(() => {
+      setAnimationOffset(prev => (prev + 1) % 100);
+    }, 50);
+    
+    return () => clearInterval(animationInterval);
+  }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div 
+          className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-green-200 opacity-20 animate-pulse"
+          style={{ 
+            transform: `translate(${Math.sin(animationOffset * 0.01) * 20}px, ${Math.cos(animationOffset * 0.02) * 20}px)`,
+            transition: 'transform 3s ease-in-out'
+          }}
+        />
+        <div 
+          className="absolute left-1/4 top-96 w-32 h-32 rounded-full bg-blue-200 opacity-20 animate-pulse"
+          style={{ 
+            animationDelay: '0.5s',
+            transform: `translate(${Math.cos(animationOffset * 0.02) * 15}px, ${Math.sin(animationOffset * 0.01) * 15}px)`,
+            transition: 'transform 4s ease-in-out'
+          }}
+        />
+        <div 
+          className="absolute right-1/3 bottom-1/4 w-48 h-48 rounded-full bg-green-300 opacity-10 animate-pulse"
+          style={{ 
+            animationDelay: '0.8s',
+            transform: `translate(${Math.sin(animationOffset * 0.03) * 10}px, ${Math.cos(animationOffset * 0.02) * 10}px)`,
+            transition: 'transform 5s ease-in-out'
+          }}
+        />
+      </div>
+      
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-green-50 to-white z-0"></div>
         <div className="container relative z-10 pt-16 pb-20 md:pt-20 md:pb-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="flex flex-col space-y-6">
+            <div className="flex flex-col space-y-6 animate-fade-in">
               <h1 className="text-4xl md:text-5xl font-bold text-sasya-green-dark tracking-tight">
                 Smart Agriculture Solutions for Indian Farmers
               </h1>
@@ -25,17 +64,21 @@ export const LandingPage = () => {
                 Aedaa empowers farmers with precision agriculture technology through the Sasya Mitra platform, enhancing yield and sustainability.
               </p>
               <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
-                <Button size="lg" className="space-x-2">
+                <Button 
+                  size="lg" 
+                  className="space-x-2 hover-scale"
+                  onClick={() => navigate('/login')}
+                >
                   <span>Get Started</span>
                   <ArrowRight className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="lg">
+                <Button variant="outline" size="lg" className="hover-scale">
                   Learn More
                 </Button>
               </div>
             </div>
-            <div className="relative">
-              <div className="relative h-[400px] w-full overflow-hidden rounded-xl shadow-xl">
+            <div className="relative animate-fade-in" style={{ animationDelay: '0.3s' }}>
+              <div className="relative h-[400px] w-full overflow-hidden rounded-xl shadow-xl hover-scale transition-all duration-500">
                 <div className="absolute inset-0 bg-green-600/20 mix-blend-multiply"></div>
                 <img 
                   src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop" 
@@ -43,7 +86,7 @@ export const LandingPage = () => {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <div className="absolute -bottom-5 -right-5 bg-white p-4 rounded-lg shadow-lg">
+              <div className="absolute -bottom-5 -right-5 bg-white p-4 rounded-lg shadow-lg animate-fade-in" style={{ animationDelay: '0.6s' }}>
                 <div className="flex items-center space-x-3 text-sasya-green font-medium">
                   <Leaf className="h-5 w-5" />
                   <span>Smart Farming Solutions</span>
@@ -57,7 +100,7 @@ export const LandingPage = () => {
       {/* Features Section */}
       <section className="py-16 bg-white">
         <div className="container">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 animate-fade-in">
             <h2 className="text-3xl font-bold text-sasya-green-dark mb-4">Transforming Agriculture With Technology</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Sasya Mitra provides cutting-edge tools to optimize water usage, monitor crop health, and increase yield.
@@ -82,7 +125,11 @@ export const LandingPage = () => {
                 description: "Sustainable solutions that reduce energy consumption and operational costs for farmers."
               }
             ].map((feature, index) => (
-              <Card key={index} className="border-none shadow-md hover:shadow-lg transition-shadow">
+              <Card 
+                key={index} 
+                className="border-none shadow-md hover:shadow-lg transition-shadow hover-scale" 
+                style={{ animationDelay: `${0.1 * index}s` }}
+              >
                 <CardHeader>
                   <div className="mb-2">{feature.icon}</div>
                   <CardTitle className="text-xl text-sasya-green-dark">{feature.title}</CardTitle>
@@ -99,7 +146,7 @@ export const LandingPage = () => {
       {/* Product Showcase */}
       <section className="py-16 bg-gray-50">
         <div className="container">
-          <h2 className="text-3xl font-bold text-sasya-green-dark mb-8 text-center">Our Solutions</h2>
+          <h2 className="text-3xl font-bold text-sasya-green-dark mb-8 text-center animate-fade-in">Our Solutions</h2>
           
           <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
             <div className="flex justify-center mb-8">
@@ -110,7 +157,7 @@ export const LandingPage = () => {
               </TabsList>
             </div>
             
-            <TabsContent value="overview" className="space-y-4">
+            <TabsContent value="overview" className="space-y-4 animate-fade-in">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div>
                   <h3 className="text-2xl font-semibold mb-4 text-sasya-green-dark">Sasya Mitra Ecosystem</h3>
@@ -128,22 +175,22 @@ export const LandingPage = () => {
                     ))}
                   </ul>
                 </div>
-                <div className="rounded-xl overflow-hidden shadow-lg">
+                <div className="rounded-xl overflow-hidden shadow-lg hover-scale">
                   <img 
-                    src="https://images.unsplash.com/photo-1586771107445-d3ca888129ce?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZhcm0lMjB0ZWNobm9sb2d5fGVufDB8fDB8fHww" 
-                    alt="Sasya Mitra System" 
+                    src="https://images.unsplash.com/photo-1598512752271-33f913a5af49?q=80&w=2070&auto=format&fit=crop" 
+                    alt="Farming Technology System" 
                     className="w-full h-auto object-cover"
                   />
                 </div>
               </div>
             </TabsContent>
             
-            <TabsContent value="hardware" className="space-y-4">
+            <TabsContent value="hardware" className="space-y-4 animate-fade-in">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <div className="rounded-xl overflow-hidden shadow-lg order-2 md:order-1">
+                <div className="rounded-xl overflow-hidden shadow-lg order-2 md:order-1 hover-scale">
                   <img 
-                    src="https://images.unsplash.com/photo-1563906267088-b029e7101114?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHNlbnNvcnN8ZW58MHx8MHx8fDA%3D" 
-                    alt="Sasya Mitra Hardware" 
+                    src="https://images.unsplash.com/photo-1603145784576-b1e0b14e2a73?q=80&w=2070&auto=format&fit=crop" 
+                    alt="Smart Agricultural Sensors" 
                     className="w-full h-auto object-cover"
                   />
                 </div>
@@ -171,7 +218,7 @@ export const LandingPage = () => {
               </div>
             </TabsContent>
             
-            <TabsContent value="software" className="space-y-4">
+            <TabsContent value="software" className="space-y-4 animate-fade-in">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div>
                   <h3 className="text-2xl font-semibold mb-4 text-sasya-green-dark">Intuitive Management Platform</h3>
@@ -194,10 +241,10 @@ export const LandingPage = () => {
                     ))}
                   </ul>
                 </div>
-                <div className="rounded-xl overflow-hidden shadow-lg">
+                <div className="rounded-xl overflow-hidden shadow-lg hover-scale">
                   <img 
-                    src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" 
-                    alt="Sasya Mitra Dashboard" 
+                    src="https://images.unsplash.com/photo-1619551734325-81aaf323686c?q=80&w=1931&auto=format&fit=crop" 
+                    alt="Farm Management Dashboard" 
                     className="w-full h-auto object-cover"
                   />
                 </div>
@@ -267,17 +314,21 @@ export const LandingPage = () => {
       {/* Call to Action */}
       <section className="py-16 bg-sasya-green bg-opacity-10">
         <div className="container">
-          <div className="max-w-3xl mx-auto text-center">
+          <div className="max-w-3xl mx-auto text-center animate-fade-in">
             <h2 className="text-3xl font-bold text-sasya-green-dark mb-4">Ready to Transform Your Farm?</h2>
             <p className="text-lg text-gray-700 mb-8">
               Join thousands of Indian farmers who are already benefiting from Sasya Mitra's smart agriculture solutions.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button size="lg" className="space-x-2">
+              <Button 
+                size="lg" 
+                className="space-x-2 hover-scale"
+                onClick={() => navigate('/login')}
+              >
                 <span>Get Started Today</span>
                 <ArrowRight className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" className="hover-scale">
                 Schedule a Demo
               </Button>
             </div>

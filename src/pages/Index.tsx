@@ -82,12 +82,6 @@ const Index = () => {
       <>
         <SiteHeader />
         <LandingPage />
-        <Button 
-          className="fixed bottom-6 right-6 shadow-lg"
-          onClick={() => setShowDashboard(true)}
-        >
-          Go to Dashboard
-        </Button>
       </>
     );
   }
