@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { MotorStatus } from "@/components/MotorStatus";
 import { GateValve } from "@/components/GateValve";
 import { PlantDiagram } from "@/components/PlantDiagram";
@@ -41,18 +42,27 @@ type PlotInterfaceProps = {
 
 export const PlotInterface = ({ plot, onUpdatePlot }: PlotInterfaceProps) => {
   const [customName, setCustomName] = useState("");
-  const [motorSectionName, setMotorSectionName] = useState(plot.motorSectionName || "");
+  const [motorSectionName, setMotorSectionName] = useState("");
   const [isMotorDialogOpen, setIsMotorDialogOpen] = useState(false);
-  const [hasMotorSection, setHasMotorSection] = useState(plot.hasMotorSection || false);
+  const [hasMotorSection, setHasMotorSection] = useState(false);
   
   const [isValveDialogOpen, setIsValveDialogOpen] = useState(false);
-  const [valveSections, setValveSections] = useState<ValveSection[]>(plot.valveSections || []);
+  const [valveSections, setValveSections] = useState<ValveSection[]>([]);
   
   const [isMotorExpanded, setIsMotorExpanded] = useState(true);
   
   // Delete confirmation dialogs
   const [isDeleteMotorDialogOpen, setIsDeleteMotorDialogOpen] = useState(false);
   const [deleteValveId, setDeleteValveId] = useState<string | null>(null);
+
+  // Initialize state from plot data whenever the plot changes
+  useEffect(() => {
+    if (plot) {
+      setHasMotorSection(plot.hasMotorSection || false);
+      setMotorSectionName(plot.motorSectionName || "");
+      setValveSections(plot.valveSections || []);
+    }
+  }, [plot]);
 
   const handleCreateMotorSection = () => {
     if (customName.trim()) {

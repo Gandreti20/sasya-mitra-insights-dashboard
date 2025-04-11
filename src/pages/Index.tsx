@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { PlotNavigation, Plot } from "@/components/PlotNavigation";
@@ -37,14 +38,17 @@ const Index = () => {
   }, [plots, activePlot]);
 
   const handleCreatePlot = (plot: Plot) => {
-    const extendedPlot: Plot = {
+    // Initialize each new plot with empty data structures
+    // but don't add any sections by default
+    const newPlot: Plot = {
       ...plot,
       hasMotorSection: false,
+      motorSectionName: "",
       valveSections: []
     };
     
-    setPlots([...plots, extendedPlot]);
-    setActivePlot(plot.id);
+    setPlots([...plots, newPlot]);
+    setActivePlot(newPlot.id);
     toast.success("New plot added", {
       description: `${plot.name} has been added to your dashboard.`,
     });
