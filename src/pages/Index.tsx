@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { PlotNavigation, Plot } from "@/components/PlotNavigation";
@@ -17,43 +16,28 @@ import {
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 
-// Extended Plot type to include motor and valve section data
-type ExtendedPlot = Plot & {
-  hasMotorSection?: boolean;
-  motorSectionName?: string;
-  valveSections?: {
-    id: string;
-    name: string;
-    isExpanded: boolean;
-  }[];
-};
-
 const Index = () => {
-  const [plots, setPlots] = useState<ExtendedPlot[]>([]);
+  const [plots, setPlots] = useState<Plot[]>([]);
   const [activePlot, setActivePlot] = useState<string>("");
   const [plotToDelete, setPlotToDelete] = useState<string | null>(null);
   const currentPlot = plots.find(plot => plot.id === activePlot);
 
-  // Add some initial state management
   useEffect(() => {
     if (plots.length > 0 && !activePlot) {
       setActivePlot(plots[0].id);
     }
     
-    // If active plot was deleted, select the first plot
     if (plots.length > 0 && activePlot && !plots.find(p => p.id === activePlot)) {
       setActivePlot(plots[0].id);
     }
     
-    // If all plots were deleted, clear active plot
     if (plots.length === 0) {
       setActivePlot("");
     }
   }, [plots, activePlot]);
 
   const handleCreatePlot = (plot: Plot) => {
-    // Initialize the plot with empty motor and valve sections
-    const extendedPlot: ExtendedPlot = {
+    const extendedPlot: Plot = {
       ...plot,
       hasMotorSection: false,
       valveSections: []
@@ -79,7 +63,7 @@ const Index = () => {
     setPlotToDelete(null);
   };
   
-  const handleUpdatePlot = (updatedPlot: ExtendedPlot) => {
+  const handleUpdatePlot = (updatedPlot: Plot) => {
     const updatedPlots = plots.map(plot => 
       plot.id === updatedPlot.id ? updatedPlot : plot
     );
@@ -121,13 +105,12 @@ const Index = () => {
           </div>
         ) : (
           <PlotInterface 
-            plot={currentPlot as ExtendedPlot} 
+            plot={currentPlot as Plot} 
             onUpdatePlot={handleUpdatePlot}
           />
         )}
       </main>
       
-      {/* Delete Plot Confirmation Dialog */}
       <AlertDialog open={!!plotToDelete} onOpenChange={(open) => !open && setPlotToDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>

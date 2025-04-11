@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { MotorStatus } from "@/components/MotorStatus";
 import { GateValve } from "@/components/GateValve";
@@ -33,17 +32,11 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
-import { Plot } from "./PlotNavigation";
-
-type ValveSection = {
-  id: string;
-  name: string;
-  isExpanded: boolean;
-};
+import { Plot, ValveSection } from "./PlotNavigation";
 
 type PlotInterfaceProps = {
   plot: Plot;
-  onUpdatePlot?: (updatedPlot: any) => void;
+  onUpdatePlot?: (updatedPlot: Plot) => void;
 };
 
 export const PlotInterface = ({ plot, onUpdatePlot }: PlotInterfaceProps) => {

@@ -21,11 +21,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
+// Define the valve section type
+export type ValveSection = {
+  id: string;
+  name: string;
+  isExpanded: boolean;
+};
+
+// Update Plot type to include motor and valve section properties
 export type Plot = {
   id: string;
   name: string;
   crop: string;
   area: string;
+  hasMotorSection?: boolean;
+  motorSectionName?: string;
+  valveSections?: ValveSection[];
 };
 
 type PlotNavigationProps = {
