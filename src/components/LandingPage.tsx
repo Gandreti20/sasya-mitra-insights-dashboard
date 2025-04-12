@@ -1,19 +1,40 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { ArrowRight, Clock, Droplet, Leaf, Sun, Thermometer, Tractor, Zap } from "lucide-react";
+import { ArrowRight, Clock, Droplet, Leaf, Sun, Thermometer, Tractor, Zap, Cpu, Database, Layout } from "lucide-react";
 
 export const LandingPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const navigate = useNavigate();
   
-  // Add floating animation effect for background elements
+  // Animated background elements
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [animationOffset, setAnimationOffset] = useState(0);
+  const heroRef = useRef<HTMLDivElement>(null);
   
+  // Track mouse position for parallax effect
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (heroRef.current) {
+        const { left, top, width, height } = heroRef.current.getBoundingClientRect();
+        const x = (e.clientX - left) / width - 0.5;
+        const y = (e.clientY - top) / height - 0.5;
+        setMousePosition({ x, y });
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+  
+  // Continuous animation for floating elements
   useEffect(() => {
     const animationInterval = setInterval(() => {
       setAnimationOffset(prev => (prev + 1) % 100);
@@ -24,35 +45,43 @@ export const LandingPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen relative overflow-hidden">
-      {/* Animated Background Elements */}
+      {/* Animated Background Elements with parallax effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div 
           className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-green-200 opacity-20 animate-pulse"
           style={{ 
-            transform: `translate(${Math.sin(animationOffset * 0.01) * 20}px, ${Math.cos(animationOffset * 0.02) * 20}px)`,
-            transition: 'transform 3s ease-in-out'
+            transform: `translate(${Math.sin(animationOffset * 0.01) * 20 + mousePosition.x * 20}px, ${Math.cos(animationOffset * 0.02) * 20 + mousePosition.y * 20}px)`,
+            transition: 'transform 0.1s ease-out'
           }}
         />
         <div 
           className="absolute left-1/4 top-96 w-32 h-32 rounded-full bg-blue-200 opacity-20 animate-pulse"
           style={{ 
             animationDelay: '0.5s',
-            transform: `translate(${Math.cos(animationOffset * 0.02) * 15}px, ${Math.sin(animationOffset * 0.01) * 15}px)`,
-            transition: 'transform 4s ease-in-out'
+            transform: `translate(${Math.cos(animationOffset * 0.02) * 15 + mousePosition.x * -15}px, ${Math.sin(animationOffset * 0.01) * 15 + mousePosition.y * -15}px)`,
+            transition: 'transform 0.1s ease-out'
           }}
         />
         <div 
           className="absolute right-1/3 bottom-1/4 w-48 h-48 rounded-full bg-green-300 opacity-10 animate-pulse"
           style={{ 
             animationDelay: '0.8s',
-            transform: `translate(${Math.sin(animationOffset * 0.03) * 10}px, ${Math.cos(animationOffset * 0.02) * 10}px)`,
-            transition: 'transform 5s ease-in-out'
+            transform: `translate(${Math.sin(animationOffset * 0.03) * 10 + mousePosition.x * 10}px, ${Math.cos(animationOffset * 0.02) * 10 + mousePosition.y * 10}px)`,
+            transition: 'transform 0.1s ease-out'
+          }}
+        />
+        <div 
+          className="absolute left-1/5 bottom-1/3 w-40 h-40 rounded-full bg-yellow-200 opacity-10 animate-pulse"
+          style={{ 
+            animationDelay: '1.2s',
+            transform: `translate(${Math.cos(animationOffset * 0.025) * 12 + mousePosition.x * -20}px, ${Math.sin(animationOffset * 0.015) * 12 + mousePosition.y * -20}px)`,
+            transition: 'transform 0.1s ease-out'
           }}
         />
       </div>
       
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
+      {/* Hero Section with parallax effect */}
+      <section ref={heroRef} className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-green-50 to-white z-0"></div>
         <div className="container relative z-10 pt-16 pb-20 md:pt-20 md:pb-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -78,15 +107,32 @@ export const LandingPage = () => {
               </div>
             </div>
             <div className="relative animate-fade-in" style={{ animationDelay: '0.3s' }}>
-              <div className="relative h-[400px] w-full overflow-hidden rounded-xl shadow-xl hover-scale transition-all duration-500">
+              <div 
+                className="relative h-[400px] w-full overflow-hidden rounded-xl shadow-xl hover-scale transition-all duration-500"
+                style={{ 
+                  transform: `perspective(1000px) rotateX(${mousePosition.y * 5}deg) rotateY(${mousePosition.x * -5}deg)`,
+                  transition: 'transform 0.1s ease-out'
+                }}
+              >
                 <div className="absolute inset-0 bg-green-600/20 mix-blend-multiply"></div>
                 <img 
                   src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop" 
                   alt="Indian Farm with modern irrigation" 
                   className="h-full w-full object-cover"
+                  style={{ 
+                    transform: `scale(1.05) translateX(${mousePosition.x * -10}px) translateY(${mousePosition.y * -10}px)`,
+                    transition: 'transform 0.1s ease-out'
+                  }}
                 />
               </div>
-              <div className="absolute -bottom-5 -right-5 bg-white p-4 rounded-lg shadow-lg animate-fade-in" style={{ animationDelay: '0.6s' }}>
+              <div 
+                className="absolute -bottom-5 -right-5 bg-white p-4 rounded-lg shadow-lg animate-fade-in" 
+                style={{ 
+                  animationDelay: '0.6s',
+                  transform: `translateX(${mousePosition.x * -15}px) translateY(${mousePosition.y * -15}px)`,
+                  transition: 'transform 0.1s ease-out'
+                }}
+              >
                 <div className="flex items-center space-x-3 text-sasya-green font-medium">
                   <Leaf className="h-5 w-5" />
                   <span>Smart Farming Solutions</span>
@@ -128,7 +174,11 @@ export const LandingPage = () => {
               <Card 
                 key={index} 
                 className="border-none shadow-md hover:shadow-lg transition-shadow hover-scale" 
-                style={{ animationDelay: `${0.1 * index}s` }}
+                style={{ 
+                  animationDelay: `${0.1 * index}s`,
+                  transform: `translateY(${Math.sin((animationOffset + index * 30) * 0.03) * 5}px)`,
+                  transition: 'transform 0.5s ease-out'
+                }}
               >
                 <CardHeader>
                   <div className="mb-2">{feature.icon}</div>
@@ -143,17 +193,44 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Product Showcase */}
-      <section className="py-16 bg-gray-50">
-        <div className="container">
+      {/* Product Showcase with new images */}
+      <section className="py-16 bg-gray-50 relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div 
+            className="absolute right-10 top-10 w-40 h-40 rounded-full bg-sasya-green opacity-5"
+            style={{ 
+              transform: `translateY(${Math.sin(animationOffset * 0.02) * 15}px)`,
+              transition: 'transform 0.5s ease-out'
+            }}
+          />
+          <div 
+            className="absolute left-10 bottom-10 w-56 h-56 rounded-full bg-sasya-blue opacity-5"
+            style={{ 
+              transform: `translateY(${Math.cos(animationOffset * 0.02) * 15}px)`,
+              transition: 'transform 0.5s ease-out'
+            }}
+          />
+        </div>
+        
+        <div className="container relative z-10">
           <h2 className="text-3xl font-bold text-sasya-green-dark mb-8 text-center animate-fade-in">Our Solutions</h2>
           
           <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
             <div className="flex justify-center mb-8">
               <TabsList className="grid w-full max-w-md grid-cols-3">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="hardware">Hardware</TabsTrigger>
-                <TabsTrigger value="software">Software</TabsTrigger>
+                <TabsTrigger value="overview" className="flex items-center gap-2">
+                  <Layout className="h-4 w-4" />
+                  <span>Overview</span>
+                </TabsTrigger>
+                <TabsTrigger value="hardware" className="flex items-center gap-2">
+                  <Cpu className="h-4 w-4" />
+                  <span>Hardware</span>
+                </TabsTrigger>
+                <TabsTrigger value="software" className="flex items-center gap-2">
+                  <Database className="h-4 w-4" />
+                  <span>Software</span>
+                </TabsTrigger>
               </TabsList>
             </div>
             
@@ -177,8 +254,8 @@ export const LandingPage = () => {
                 </div>
                 <div className="rounded-xl overflow-hidden shadow-lg hover-scale">
                   <img 
-                    src="https://images.unsplash.com/photo-1598512752271-33f913a5af49?q=80&w=2070&auto=format&fit=crop" 
-                    alt="Farming Technology System" 
+                    src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=2070&auto=format&fit=crop" 
+                    alt="Farming Technology Control Center" 
                     className="w-full h-auto object-cover"
                   />
                 </div>
@@ -189,8 +266,8 @@ export const LandingPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 <div className="rounded-xl overflow-hidden shadow-lg order-2 md:order-1 hover-scale">
                   <img 
-                    src="https://images.unsplash.com/photo-1603145784576-b1e0b14e2a73?q=80&w=2070&auto=format&fit=crop" 
-                    alt="Smart Agricultural Sensors" 
+                    src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop" 
+                    alt="Smart Agricultural Sensors Circuit Board" 
                     className="w-full h-auto object-cover"
                   />
                 </div>
@@ -243,8 +320,8 @@ export const LandingPage = () => {
                 </div>
                 <div className="rounded-xl overflow-hidden shadow-lg hover-scale">
                   <img 
-                    src="https://images.unsplash.com/photo-1619551734325-81aaf323686c?q=80&w=1931&auto=format&fit=crop" 
-                    alt="Farm Management Dashboard" 
+                    src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=2070&auto=format&fit=crop" 
+                    alt="Farm Management Dashboard Software" 
                     className="w-full h-auto object-cover"
                   />
                 </div>
