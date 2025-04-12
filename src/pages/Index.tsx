@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { PlotNavigation, Plot } from "@/components/PlotNavigation";
 import { PlotInterface } from "@/components/PlotInterface";
 import { LandingPage } from "@/components/LandingPage";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { 
   AlertDialog,
@@ -23,6 +24,7 @@ const Index = () => {
   const [plots, setPlots] = useState<Plot[]>([]);
   const [activePlot, setActivePlot] = useState<string>("");
   const [plotToDelete, setPlotToDelete] = useState<string | null>(null);
+  const navigate = useNavigate();
   const currentPlot = plots.find(plot => plot.id === activePlot);
 
   useEffect(() => {
@@ -77,11 +79,15 @@ const Index = () => {
     setPlots(updatedPlots);
   };
 
+  const handleDashboardClick = () => {
+    setShowDashboard(true);
+  };
+
   if (!showDashboard) {
     return (
       <>
         <SiteHeader />
-        <LandingPage />
+        <LandingPage onDashboardClick={handleDashboardClick} />
       </>
     );
   }
