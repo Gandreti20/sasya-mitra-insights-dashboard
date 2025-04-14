@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -25,7 +24,6 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
 
   return (
     <div className="relative overflow-hidden">
-      {/* Background Animation Elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         {floatingElements.map(element => (
           <motion.div
@@ -54,9 +52,7 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
       </div>
 
       <main className="relative">
-        {/* Hero Section */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
-          
           <div className="container mx-auto px-4 sm:px-6 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
               <motion.h1 
@@ -126,23 +122,19 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
           ))}
         </section>
 
-        {/* Features Section */}
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Feature 1 */}
               <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Smart Irrigation</h3>
                 <p className="text-gray-600">Optimize water usage based on real-time data and weather forecasts.</p>
               </div>
 
-              {/* Feature 2 */}
               <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Real-time Monitoring</h3>
                 <p className="text-gray-600">Monitor soil moisture, temperature, and other critical parameters remotely.</p>
               </div>
 
-              {/* Feature 3 */}
               <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Automated Alerts</h3>
                 <p className="text-gray-600">Receive instant notifications for unusual conditions or potential issues.</p>
@@ -151,7 +143,6 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
           </div>
         </section>
 
-        {/* How It Works Section */}
         <section className="py-16">
           <div className="container mx-auto px-4 sm:px-6">
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">How It Works</h2>
@@ -175,7 +166,6 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
         </section>
       </main>
 
-      {/* Footer */}
       <footer className="py-8 bg-gray-100 border-t">
         <div className="container mx-auto px-4 sm:px-6 text-center">
           <p className="text-gray-500">
