@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -24,9 +23,16 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
     { id: 5, x: 0.1, y: 0.8, scale: 0.9, rotate: 25, color: 'bg-purple-300/30' },
   ];
 
+  const agricultureImages = [
+    { id: 'photo-1466721591366-2d5fba72006d', alt: 'Farm landscape with wildlife' },
+    { id: 'photo-1493962853295-0fd70327578a', alt: 'Ox on mountain terrain' },
+    { id: 'photo-1465379944081-7f47de8d74ac', alt: 'Cattle in forest' },
+    { id: 'photo-1469041797191-50ace28483c3', alt: 'Camels on open field' },
+    { id: 'photo-1452378174528-3090a4bba7b2', alt: 'Horses behind fence' }
+  ];
+
   return (
     <div className="relative overflow-hidden">
-      {/* Background Animation Elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         {floatingElements.map(element => (
           <motion.div
@@ -55,7 +61,6 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
       </div>
 
       <main className="relative">
-        {/* Hero Section */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           <div className="container mx-auto px-4 sm:px-6 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
@@ -126,12 +131,10 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
           ))}
         </section>
 
-        {/* Features Section */}
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6">
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Powerful Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Feature 1 */}
               <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                 <div className="mb-4 text-sasya-green">
                   <Droplet size={32} />
@@ -140,7 +143,6 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
                 <p className="text-gray-600">Optimize water usage based on real-time data and weather forecasts.</p>
               </div>
 
-              {/* Feature 2 */}
               <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                 <div className="mb-4 text-sasya-green">
                   <BarChart3 size={32} />
@@ -149,7 +151,6 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
                 <p className="text-gray-600">Monitor soil moisture, temperature, and other critical parameters remotely.</p>
               </div>
 
-              {/* Feature 3 */}
               <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                 <div className="mb-4 text-sasya-green">
                   <Cpu size={32} />
@@ -161,7 +162,6 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
           </div>
         </section>
 
-        {/* How It Works Section */}
         <section className="py-16">
           <div className="container mx-auto px-4 sm:px-6">
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">How It Works</h2>
@@ -192,7 +192,7 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
                     </div>
                     <div>
                       <h3 className="text-xl font-medium text-gray-800 mb-2">AI-Powered Analysis</h3>
-                      <p className="text-gray-700">Our system analyzes the data collected to provide insights, trends, and actionable recommendations for optimizing your irrigation strategy.</p>
+                      <p className="text-gray-600">Our system analyzes the data collected to provide insights, trends, and actionable recommendations for optimizing your irrigation strategy.</p>
                     </div>
                   </div>
                 </div>
@@ -205,7 +205,7 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
                     </div>
                     <div>
                       <h3 className="text-xl font-medium text-gray-800 mb-2">Smart Irrigation Control</h3>
-                      <p className="text-gray-700">Take control of your irrigation system with automated adjustments based on the analysis, weather forecasts, and crop-specific needs.</p>
+                      <p className="text-gray-600">Take control of your irrigation system with automated adjustments based on the analysis, weather forecasts, and crop-specific needs.</p>
                     </div>
                   </div>
                 </div>
@@ -213,8 +213,7 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
             </Tabs>
           </div>
         </section>
-        
-        {/* Testimonial Section */}
+
         <section className="py-16 bg-sasya-green/5">
           <div className="container mx-auto px-4 sm:px-6">
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Trusted by Farmers</h2>
@@ -248,9 +247,34 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
             </div>
           </div>
         </section>
+
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6">
+            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Our Agricultural Landscapes</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {agricultureImages.map((image, index) => (
+                <motion.div
+                  key={image.id}
+                  className="overflow-hidden rounded-lg shadow-lg"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ 
+                    delay: index * 0.2, 
+                    duration: 0.5 
+                  }}
+                >
+                  <img 
+                    src={`https://images.unsplash.com/photo-${image.id}?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80`} 
+                    alt={image.alt} 
+                    className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
 
-      {/* Footer */}
       <footer className="py-8 bg-gray-100 border-t">
         <div className="container mx-auto px-4 sm:px-6 text-center">
           <p className="text-gray-500">
