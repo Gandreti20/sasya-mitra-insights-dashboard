@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { PlotNavigation, Plot } from "@/components/PlotNavigation";
@@ -83,11 +82,18 @@ const Index = () => {
     setShowDashboard(true);
   };
 
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
+
   if (!showDashboard) {
     return (
       <>
         <SiteHeader />
-        <LandingPage onDashboardClick={handleDashboardClick} />
+        <LandingPage 
+          onDashboardClick={handleDashboardClick} 
+          onLoginClick={handleLoginClick}
+        />
       </>
     );
   }

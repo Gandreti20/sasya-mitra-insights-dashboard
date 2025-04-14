@@ -1,5 +1,5 @@
+
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   Tabs, 
@@ -11,11 +11,10 @@ import { motion } from "framer-motion";
 
 type LandingPageProps = {
   onDashboardClick?: () => void;
+  onLoginClick?: () => void;
 };
 
-export const LandingPage = ({ onDashboardClick }: LandingPageProps) => {
-  const navigate = useNavigate();
-
+export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps) => {
   const floatingElements = [
     { id: 1, x: 0.2, y: 0.3, scale: 0.8, rotate: -20, color: 'bg-sasya-green/20' },
     { id: 2, x: 0.8, y: 0.2, scale: 0.6, rotate: 15, color: 'bg-blue-300/30' },
@@ -86,7 +85,7 @@ export const LandingPage = ({ onDashboardClick }: LandingPageProps) => {
               >
                 <Button 
                   className="bg-sasya-green hover:bg-sasya-green-dark text-white w-full sm:w-auto"
-                  onClick={() => navigate("/login")}
+                  onClick={onLoginClick}
                 >
                   Get Started
                 </Button>
