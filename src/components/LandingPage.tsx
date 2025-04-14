@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -7,6 +8,7 @@ import {
   TabsTrigger 
 } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
+import { Award, BarChart3, Droplet, Leaf, Cpu } from "lucide-react";
 
 type LandingPageProps = {
   onDashboardClick?: () => void;
@@ -24,6 +26,7 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
 
   return (
     <div className="relative overflow-hidden">
+      {/* Background Animation Elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         {floatingElements.map(element => (
           <motion.div
@@ -52,6 +55,7 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
       </div>
 
       <main className="relative">
+        {/* Hero Section */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           <div className="container mx-auto px-4 sm:px-6 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
@@ -122,20 +126,34 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
           ))}
         </section>
 
+        {/* Features Section */}
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6">
+            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Powerful Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Feature 1 */}
               <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <div className="mb-4 text-sasya-green">
+                  <Droplet size={32} />
+                </div>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Smart Irrigation</h3>
                 <p className="text-gray-600">Optimize water usage based on real-time data and weather forecasts.</p>
               </div>
 
+              {/* Feature 2 */}
               <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <div className="mb-4 text-sasya-green">
+                  <BarChart3 size={32} />
+                </div>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Real-time Monitoring</h3>
                 <p className="text-gray-600">Monitor soil moisture, temperature, and other critical parameters remotely.</p>
               </div>
 
+              {/* Feature 3 */}
               <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <div className="mb-4 text-sasya-green">
+                  <Cpu size={32} />
+                </div>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Automated Alerts</h3>
                 <p className="text-gray-600">Receive instant notifications for unusual conditions or potential issues.</p>
               </div>
@@ -143,6 +161,7 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
           </div>
         </section>
 
+        {/* How It Works Section */}
         <section className="py-16">
           <div className="container mx-auto px-4 sm:px-6">
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">How It Works</h2>
@@ -153,19 +172,85 @@ export const LandingPage = ({ onDashboardClick, onLoginClick }: LandingPageProps
                 <TabsTrigger value="control" className="data-[state=active]:bg-sasya-green data-[state=active]:text-white rounded-full px-4 py-2 transition-colors">Control</TabsTrigger>
               </TabsList>
               <TabsContent value="monitor" className="mt-6">
-                <p className="text-gray-700">Connect sensors to your farm to start monitoring soil conditions in real-time.</p>
+                <div className="bg-white p-6 rounded-lg shadow-sm">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-sasya-green/10 p-3 rounded-full text-sasya-green">
+                      <Leaf size={24} />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-medium text-gray-800 mb-2">Connect Sensors to Your Farm</h3>
+                      <p className="text-gray-700">Install our IoT sensors throughout your farm to start monitoring soil conditions, moisture levels, and environmental factors in real-time.</p>
+                    </div>
+                  </div>
+                </div>
               </TabsContent>
               <TabsContent value="analyze" className="mt-6">
-                <p className="text-gray-700">Our system analyzes the data collected to provide insights and recommendations.</p>
+                <div className="bg-white p-6 rounded-lg shadow-sm">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-sasya-green/10 p-3 rounded-full text-sasya-green">
+                      <BarChart3 size={24} />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-medium text-gray-800 mb-2">AI-Powered Analysis</h3>
+                      <p className="text-gray-700">Our system analyzes the data collected to provide insights, trends, and actionable recommendations for optimizing your irrigation strategy.</p>
+                    </div>
+                  </div>
+                </div>
               </TabsContent>
               <TabsContent value="control" className="mt-6">
-                <p className="text-gray-700">Take control of your irrigation system with automated adjustments based on the analysis.</p>
+                <div className="bg-white p-6 rounded-lg shadow-sm">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-sasya-green/10 p-3 rounded-full text-sasya-green">
+                      <Cpu size={24} />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-medium text-gray-800 mb-2">Smart Irrigation Control</h3>
+                      <p className="text-gray-700">Take control of your irrigation system with automated adjustments based on the analysis, weather forecasts, and crop-specific needs.</p>
+                    </div>
+                  </div>
+                </div>
               </TabsContent>
             </Tabs>
           </div>
         </section>
+        
+        {/* Testimonial Section */}
+        <section className="py-16 bg-sasya-green/5">
+          <div className="container mx-auto px-4 sm:px-6">
+            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Trusted by Farmers</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="flex items-center mb-4">
+                  <Award className="text-sasya-green mr-2" size={16} />
+                  <p className="text-sm font-medium text-sasya-green">Verified Farmer</p>
+                </div>
+                <p className="text-gray-600 mb-4">"Sasya Mitra has revolutionized how I manage water on my farm. I've seen a 30% reduction in water usage while maintaining excellent crop health."</p>
+                <p className="font-semibold text-gray-800">- Rajesh Kumar, Wheat Farmer</p>
+              </div>
+              
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="flex items-center mb-4">
+                  <Award className="text-sasya-green mr-2" size={16} />
+                  <p className="text-sm font-medium text-sasya-green">Verified Farmer</p>
+                </div>
+                <p className="text-gray-600 mb-4">"The real-time alerts have saved my crops multiple times. I get notifications before issues become serious problems."</p>
+                <p className="font-semibold text-gray-800">- Anjali Singh, Rice Grower</p>
+              </div>
+              
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="flex items-center mb-4">
+                  <Award className="text-sasya-green mr-2" size={16} />
+                  <p className="text-sm font-medium text-sasya-green">Verified Farmer</p>
+                </div>
+                <p className="text-gray-600 mb-4">"Easy to set up and even easier to use. The interface is intuitive, and the support team is always there when I need help."</p>
+                <p className="font-semibold text-gray-800">- Prakash Patel, Vegetable Farm</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
+      {/* Footer */}
       <footer className="py-8 bg-gray-100 border-t">
         <div className="container mx-auto px-4 sm:px-6 text-center">
           <p className="text-gray-500">
