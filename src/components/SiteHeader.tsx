@@ -1,7 +1,6 @@
 
 import { TreePine, User, Bell, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Plot } from "./PlotNavigation";
 import { Link, useNavigate } from "react-router-dom";
 
 export const SiteHeader = () => {

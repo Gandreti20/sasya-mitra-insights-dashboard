@@ -3,7 +3,8 @@ import { useRef, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Leaf, Thermometer, Droplet, SunDim, Moon } from "lucide-react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
+import * as THREE from "three";
 
 // Mock data for plant conditions
 const plantData = {
@@ -17,7 +18,7 @@ const plantData = {
 
 // Create a 3D tree model
 const Tree = (props: any) => {
-  const group = useRef<THREE.Group>();
+  const group = useRef<THREE.Group>(null);
   useFrame(() => {
     if (group.current) {
       group.current.rotation.y += 0.002;
@@ -76,7 +77,7 @@ const Tree = (props: any) => {
 
 // Create environmental celestial body (sun/moon)
 const CelestialBody = ({ isDay }: { isDay: boolean }) => {
-  const ref = useRef<THREE.Mesh>();
+  const ref = useRef<THREE.Mesh>(null);
   
   useFrame(() => {
     if (ref.current) {
