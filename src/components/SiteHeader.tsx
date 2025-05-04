@@ -2,12 +2,16 @@
 import { TreePine, User, Bell, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Plot } from "./PlotNavigation";
-import { Link } from "react-router-dom";
-
-// We're removing the direct import of PlotNavigation and not using it in this file
-// since it's now managed at the Index component level
+import { Link, useNavigate } from "react-router-dom";
 
 export const SiteHeader = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // In a real app, you would also clear authentication state/tokens here
+    navigate("/");
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
       <div className="container flex h-16 items-center justify-between">
@@ -31,7 +35,6 @@ export const SiteHeader = () => {
           </div>
         </div>
         
-        {/* Removing the PlotNavigation component from here since it's now managed at the Index level */}
         <div className="hidden md:flex items-center space-x-1">
           {/* Navigation items can go here if needed */}
         </div>
@@ -53,15 +56,12 @@ export const SiteHeader = () => {
             </Button>
           </Link>
           
-          <Link to="/login">
-            <Button variant="ghost" size="icon">
-              <LogOut className="h-5 w-5" />
-            </Button>
-          </Link>
+          <Button variant="ghost" size="icon" onClick={handleLogout}>
+            <LogOut className="h-5 w-5" />
+          </Button>
         </nav>
       </div>
       
-      {/* Remove the mobile PlotNavigation as well */}
       <div className="md:hidden border-t bg-background px-4 py-2">
         {/* Mobile navigation items can go here if needed */}
       </div>
